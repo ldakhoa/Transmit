@@ -1,10 +1,3 @@
-//
-//  UIColor+String.swift
-//  Transmit
-//
-//  Created by Khoa Le on 26/09/2023.
-//
-
 import UIKit
 import SwiftUI
 

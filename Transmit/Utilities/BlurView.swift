@@ -1,10 +1,3 @@
-//
-//  BlurView.swift
-//  Transmit
-//
-//  Created by Khoa Le on 27/09/2023.
-//
-
 import SwiftUI
 
 struct BlurView: UIViewRepresentable {

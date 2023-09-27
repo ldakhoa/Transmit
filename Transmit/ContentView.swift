@@ -1,15 +1,7 @@
-//
-//  ContentView.swift
-//  Transmit
-//
-//  Created by Khoa Le on 26/09/2023.
-//
-
 import SwiftUI
 
 struct ContentView: View {
     private let data: [Episode] = Episode.mockData
-    @State private var isPlaying: Bool = false
     @State private var shouldShowMinimizeView: Bool = true
 
     var body: some View {
@@ -23,35 +15,19 @@ struct ContentView: View {
                         .padding(.top, 24)
                         .padding(.horizontal, 16)
                         .background(Color.white)
+
+                    info
+                        .padding(.vertical, 24)
+                        .padding(.horizontal, 16)
                 }
             }
             .background("F8FAFC".color)
-            .padding(.bottom, shouldShowMinimizeView ? 80 : 0)
+            .padding(.bottom, shouldShowMinimizeView ? 90 : 0)
 
             if shouldShowMinimizeView {
                 VStack {
                     Spacer()
-                    ZStack {
-                        BlurView(style: .extraLight)
-                            .frame(maxWidth: .infinity, maxHeight: 150)
-                        VStack {
-                            Text("5: Bill Lumbergh")
-                                .bold()
-                                .font(.system(size: 15))
-                            Button(action: { isPlaying.toggle() }) {
-                                Image(systemName: isPlaying ? "pause.fill" : "play.fill")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 17, height: 17)
-                                    .padding(12)
-                                    .background("334155".color)
-                                    .foregroundColor(.white)
-                                    .clipShape(Circle())
-                                    .animation(.bouncy, value: isPlaying)
-                            }
-                        }
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: 120)
+                    MinimizePlayerView()
                 }
                 .ignoresSafeArea()
             }
@@ -74,7 +50,7 @@ struct ContentView: View {
                 .font(.system(size: 18))
                 .bold()
             Text("Conversations with the most tragically misunderstood people of our time.")
-                .font(.system(size: 16))
+                .fontWithLineHeight(font: .systemFont(ofSize: 16))
                 .padding(.horizontal, 24)
                 .multilineTextAlignment(.center)
 
@@ -119,8 +95,8 @@ struct ContentView: View {
                 .bold()
                 .font(.system(size: 17))
             Text(episode.description)
-                .font(.system(size: 16))
-                .foregroundColor("334155".color)
+                .fontWithLineHeight(font: .systemFont(ofSize: 16))
+                .foregroundColor(Styles.paragraph)
             HStack(spacing: 16) {
                 Button(action: {
                     shouldShowMinimizeView = true
@@ -148,6 +124,44 @@ struct ContentView: View {
     }
 
     @ViewBuilder
+    private var info: some View {
+        VStack(alignment: .leading, spacing: 24) {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(alignment: .center) {
+                    Image(uiImage: UIImage(named: "about")!)
+
+                    Text("About")
+                        .fontWeight(.medium)
+                        .font(.system(size: 15))
+                        .foregroundColor("0F172A".color)
+                }
+                Text("In this show, Eric and Wes dig deep to get to the facts with guests who have been labeled villains by a society quick to judge, without actually getting the full story. Tune in every Thursday to get to the truth with another misunderstood outcast as they share the missing context in their tragic tale.")
+                    .fontWithLineHeight(font: .systemFont(ofSize: 16), lineHeight: 28)
+                    .foregroundColor(Styles.paragraph)
+            }
+
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Image(uiImage: UIImage(named: "hosted")!)
+                    Text("Hosted By")
+                        .fontWeight(.medium)
+                        .font(.system(size: 15))
+                }
+                HStack {
+                    Text("Eric Gordon")
+                        .bold()
+                        .font(.system(size: 15))
+                        .foregroundColor("0F172A".color)
+                    Text("/")
+                    Text("Wes Mantooth")
+                        .bold()
+                        .font(.system(size: 15))
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
     private func iconImage(named: String) -> some View {
         Image(uiImage: UIImage(named: named)!)
             .renderingMode(.template)
@@ -161,6 +175,68 @@ struct TransmitDivider: View {
         Divider()
             .overlay("94a3b8".color)
             .opacity(0.3)
+    }
+}
+
+struct MinimizePlayerView: View {
+    @State private var isPlaying: Bool = false
+
+    var body: some View {
+        ZStack {
+            BlurView(style: .extraLight)
+                .frame(maxWidth: .infinity, maxHeight: 150)
+            VStack {
+                Text("5: Bill Lumbergh")
+                    .bold()
+                    .font(.system(size: 15))
+                HStack {
+                    Image(uiImage: UIImage(named: "speaker")!)
+                        .renderingMode(.template)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 18, height: 18)
+                        .foregroundColor("334155".color)
+
+                    Spacer()
+
+                    HStack(spacing: 16) {
+                        Image(systemName: "gobackward.10")
+                            .renderingMode(.template)
+                            .foregroundColor("334155".color)
+                        Button(action: { isPlaying.toggle() }) {
+                            Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                                .renderingMode(.template)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 17, height: 17)
+                                .padding(12)
+                                .background("334155".color)
+                                .foregroundColor(.white)
+                                .clipShape(Circle())
+                        }
+
+                        Button {
+
+                        } label: {
+                            Image(systemName: "goforward.10")
+                                .foregroundColor("334155".color)
+                        }
+                    }
+
+                    Spacer()
+
+                    Button {
+                    } label: {
+                        Image(uiImage: UIImage(named: "speech1x")!)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 18, height: 18)
+                    }
+                }
+                .padding(.horizontal, 32)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: 120)
     }
 }
 
