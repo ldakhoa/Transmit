@@ -17,6 +17,8 @@
 		6A6A16952AC4292D0055D7DF /* FontWithLineHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6A16942AC4292D0055D7DF /* FontWithLineHeight.swift */; };
 		6A6A16982AC4294A0055D7DF /* Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6A16972AC4294A0055D7DF /* Styles.swift */; };
 		6A6A169A2AC42E930055D7DF /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6A16992AC42E930055D7DF /* SliderView.swift */; };
+		6AE4AD792AC45F560006AE44 /* OrientationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE4AD782AC45F560006AE44 /* OrientationInfo.swift */; };
+		6AE4AD7B2AC472830006AE44 /* MinimizePlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE4AD7A2AC472830006AE44 /* MinimizePlayerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +33,8 @@
 		6A6A16942AC4292D0055D7DF /* FontWithLineHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontWithLineHeight.swift; sourceTree = "<group>"; };
 		6A6A16972AC4294A0055D7DF /* Styles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Styles.swift; sourceTree = "<group>"; };
 		6A6A16992AC42E930055D7DF /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
+		6AE4AD782AC45F560006AE44 /* OrientationInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationInfo.swift; sourceTree = "<group>"; };
+		6AE4AD7A2AC472830006AE44 /* MinimizePlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinimizePlayerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +70,8 @@
 				6A6A16962AC4293D0055D7DF /* Utilities */,
 				6A6A16802AC333D00055D7DF /* TransmitApp.swift */,
 				6A6A16822AC333D00055D7DF /* ContentView.swift */,
+				6AE4AD782AC45F560006AE44 /* OrientationInfo.swift */,
+				6AE4AD7A2AC472830006AE44 /* MinimizePlayerView.swift */,
 				6A6A16992AC42E930055D7DF /* SliderView.swift */,
 				6A6A16922AC352660055D7DF /* Episode.swift */,
 				6A6A16842AC333D20055D7DF /* Assets.xcassets */,
@@ -165,12 +171,14 @@
 			files = (
 				6A6A16832AC333D00055D7DF /* ContentView.swift in Sources */,
 				6A6A169A2AC42E930055D7DF /* SliderView.swift in Sources */,
+				6AE4AD792AC45F560006AE44 /* OrientationInfo.swift in Sources */,
 				6A6A16982AC4294A0055D7DF /* Styles.swift in Sources */,
 				6A6A16912AC350A20055D7DF /* BlurView.swift in Sources */,
 				6A6A16812AC333D00055D7DF /* TransmitApp.swift in Sources */,
 				6A6A16932AC352660055D7DF /* Episode.swift in Sources */,
 				6A6A168F2AC337F70055D7DF /* UIColor+String.swift in Sources */,
 				6A6A16952AC4292D0055D7DF /* FontWithLineHeight.swift in Sources */,
+				6AE4AD7B2AC472830006AE44 /* MinimizePlayerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

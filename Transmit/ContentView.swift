@@ -2,9 +2,32 @@ import SwiftUI
 
 struct ContentView: View {
     private let data: [Episode] = Episode.mockData
-    @State private var shouldShowMinimizeView: Bool = true
+    @State private var shouldShowMinimizeView: Bool = false
+    @EnvironmentObject var orientationInfo: OrientationInfo
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+
+    private var isPhone: Bool {
+        UIDevice.current.userInterfaceIdiom == .phone
+    }
+
+    private var isPortrait: Bool {
+        orientationInfo.orientation == .portrait
+    }
 
     var body: some View {
+        if isPhone {
+            contentView
+        } else {
+            if orientationInfo.orientation == .portrait {
+                contentView
+            } else {
+                iPadContentView
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var contentView: some View {
         ZStack {
             ScrollView {
                 VStack(spacing: 0) {
@@ -35,11 +58,61 @@ struct ContentView: View {
     }
 
     @ViewBuilder
+    private var iPadContentView: some View {
+        HStack(spacing: 0) {
+            VStack {
+                HStack(alignment: .center, spacing: 24) {
+                    Text("Hosted by")
+                        .foregroundColor("64748B".color)
+                        .font(.system(size: 14))
+                    Text("Eric Gordon")
+                        .fontWeight(.semibold)
+                        .font(.system(size: 14))
+                        .foregroundColor("0F172A".color)
+                    Text("/")
+                        .font(.system(size: 14))
+                        .foregroundColor("0F172A".color)
+                    Text("Wes Mantooth")
+                        .fontWeight(.semibold)
+                        .font(.system(size: 14))
+                        .foregroundColor("0F172A".color)
+
+                }
+                .rotationEffect(Angle(degrees: 90), anchor: .center)
+                .fixedSize()
+                .padding(.top, 152)
+
+                Spacer()
+            }
+            .frame(maxWidth: 40, maxHeight: .infinity)
+            .background("F8FAFC".color)
+            TransmitDivider()
+
+            ScrollView(showsIndicators: true) {
+                header
+                    .padding(.horizontal, 24)
+            }
+            .frame(maxWidth: 348)
+            .background("F8FAFC".color)
+
+            TransmitDivider()
+
+            ScrollView {
+                episodes
+                    .padding(.horizontal, 24)
+            }
+
+        }
+    }
+    
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+
+    @ViewBuilder
     private var header: some View {
-        VStack(spacing: 24) {
+        VStack(alignment: isPortrait ? .center : .leading, spacing: 24) {
             Image(uiImage: UIImage(named: "poster")!)
                 .resizable()
-                .frame(width: 200, height: 200)
+                .frame(width: isPortrait ? 200 : 300, height: isPortrait ? 200 : 300)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .shadow(color: "e2e8f0".color, radius: 10, x: 0, y: 0)
                 .overlay(
@@ -50,19 +123,41 @@ struct ContentView: View {
                 .font(.system(size: 18))
                 .bold()
             Text("Conversations with the most tragically misunderstood people of our time.")
-                .fontWithLineHeight(font: .systemFont(ofSize: 16))
-                .padding(.horizontal, 24)
-                .multilineTextAlignment(.center)
+                .fontWithLineHeight(font: .systemFont(ofSize: 17))
+                .padding(.horizontal, isPortrait ? 24 : 0)
+                .multilineTextAlignment(isPortrait ? .center : .leading)
 
             VStack(spacing: 12) {
-                TransmitDivider()
-                    .frame(width: 32 * 8) // 4 image size width 32 * 4, with spacing 32 for each
+                if isPortrait {
+                    TransmitDivider()
+                        .frame(width: 32 * 8) // 4 image size width 32 * 4, with spacing 32 for each
+                }
 
-                HStack(spacing: 32) {
-                    iconImage(named: "spotify")
-                    iconImage(named: "podcast")
-                    iconImage(named: "overcast")
-                    iconImage(named: "rss")
+                if isPortrait {
+                    HStack(spacing: 32) {
+                        iconImage(named: "spotify")
+                        iconImage(named: "podcast")
+                        iconImage(named: "overcast")
+                        iconImage(named: "rss")
+                    }
+                } else {
+                    VStack(alignment: .leading, spacing: 32) {
+                        info
+
+                        VStack(alignment: .leading, spacing: 32) {
+                            HStack {
+                                Image(uiImage: UIImage(named: "listen")!)
+                                Text("Listen")
+                                    .fontWeight(.medium)
+                                    .font(.system(size: 15))
+                            }
+
+                            iconImageLandscape(named: "spotify", title: "Spotify")
+                            iconImageLandscape(named: "podcast", title: "Apple Podcast")
+                            iconImageLandscape(named: "overcast", title: "Overcast")
+                            iconImageLandscape(named: "rss", title: "RSS Feed")
+                        }
+                    }
                 }
             }
         }
@@ -97,6 +192,7 @@ struct ContentView: View {
             Text(episode.description)
                 .fontWithLineHeight(font: .systemFont(ofSize: 16))
                 .foregroundColor(Styles.paragraph)
+                .lineLimit(0)
             HStack(spacing: 16) {
                 Button(action: {
                     shouldShowMinimizeView = true
@@ -140,22 +236,25 @@ struct ContentView: View {
                     .foregroundColor(Styles.paragraph)
             }
 
-            VStack(alignment: .leading, spacing: 12) {
-                HStack {
-                    Image(uiImage: UIImage(named: "hosted")!)
-                    Text("Hosted By")
-                        .fontWeight(.medium)
-                        .font(.system(size: 15))
-                }
-                HStack {
-                    Text("Eric Gordon")
-                        .bold()
-                        .font(.system(size: 15))
-                        .foregroundColor("0F172A".color)
-                    Text("/")
-                    Text("Wes Mantooth")
-                        .bold()
-                        .font(.system(size: 15))
+            if isPortrait {
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack {
+                        Image(uiImage: UIImage(named: "hosted")!)
+                        Text("Hosted By")
+                            .fontWeight(.medium)
+                            .font(.system(size: 15))
+                    }
+                    HStack {
+                        Text("Eric Gordon")
+                            .bold()
+                            .font(.system(size: 15))
+                            .foregroundColor("0F172A".color)
+                        Text("/")
+                        Text("Wes Mantooth")
+                            .bold()
+                            .font(.system(size: 15))
+                            .foregroundColor("0F172A".color)
+                    }
                 }
             }
         }
@@ -168,6 +267,18 @@ struct ContentView: View {
             .foregroundColor("94a3b8".color)
             .frame(width: 32, height: 32)
     }
+
+    @ViewBuilder
+    private func iconImageLandscape(named: String, title: String) -> some View {
+        HStack {
+            iconImage(named: named)
+            Text(title)
+                .fontWeight(.medium)
+                .foregroundColor(Styles.textLabel)
+                .font(.system(size: 15))
+        }
+    }
+
 }
 
 struct TransmitDivider: View {
@@ -178,81 +289,15 @@ struct TransmitDivider: View {
     }
 }
 
-struct MinimizePlayerView: View {
-    @State private var isPlaying: Bool = false
-    @State private var sliderValue: Double = 6.0
-
-    var body: some View {
-        ZStack {
-            Color.white
-                .opacity(0.8)
-                .frame(maxWidth: .infinity, maxHeight: 150)
-            VStack {
-                SliderView(
-                    value: $sliderValue,
-                    sliderRange: 0...10
-                )
-                .frame(height: 8)
-
-                Spacer()
-
-                Text("5: Bill Lumbergh")
-                    .bold()
-                    .font(.system(size: 15))
-                HStack {
-                    Image(uiImage: UIImage(named: "speaker")!)
-                        .renderingMode(.template)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 18, height: 18)
-                        .foregroundColor("334155".color)
-
-                    Spacer()
-
-                    HStack(spacing: 16) {
-                        Image(systemName: "gobackward.10")
-                            .renderingMode(.template)
-                            .foregroundColor("334155".color)
-                        Button(action: { isPlaying.toggle() }) {
-                            Image(systemName: isPlaying ? "pause.fill" : "play.fill")
-                                .renderingMode(.template)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 17, height: 17)
-                                .padding(12)
-                                .background("334155".color)
-                                .foregroundColor(.white)
-                                .clipShape(Circle())
-                        }
-
-                        Button {
-
-                        } label: {
-                            Image(systemName: "goforward.10")
-                                .foregroundColor("334155".color)
-                        }
-                    }
-
-                    Spacer()
-
-                    Button {
-                    } label: {
-                        Image(uiImage: UIImage(named: "speech1x")!)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 18, height: 18)
-                    }
-                }
-                .padding(.horizontal, 32)
-                Spacer()
-            }
-        }
-        .frame(maxWidth: .infinity, maxHeight: 140)
-    }
-}
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        Group {
+            ContentView()
+                .previewInterfaceOrientation(.landscapeLeft)
+                .environmentObject(OrientationInfo())
+
+            ContentView()
+                .environmentObject(OrientationInfo())
+        }
     }
 }
