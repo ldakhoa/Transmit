@@ -41,6 +41,7 @@ struct ContentView: View {
                     info
                         .padding(.vertical, 24)
                         .padding(.horizontal, 16)
+                        .padding(.bottom, 24)
                 }
             }
             .background("F8FAFC".color)
@@ -102,7 +103,7 @@ struct ContentView: View {
                 ScrollView {
                     episodes
                         .padding(.horizontal, 24)
-                        .padding(.bottom, shouldShowMinimizeView ? 96 : 0)
+                        .padding(.bottom, shouldShowMinimizeView ? 100 + 24 : 0)
                 }
 
                 if shouldShowMinimizeView {
