@@ -3,8 +3,7 @@ import SwiftUI
 struct ContentView: View {
     private let data: [Episode] = Episode.mockData
     @State private var shouldShowMinimizeView: Bool = false
-    @EnvironmentObject var orientationInfo: OrientationInfo
-    @Environment(\.verticalSizeClass) var verticalSizeClass
+    @EnvironmentObject private var orientationInfo: OrientationInfo
 
     private var isPhone: Bool {
         UIDevice.current.userInterfaceIdiom == .phone
@@ -51,6 +50,8 @@ struct ContentView: View {
                 VStack {
                     Spacer()
                     MinimizePlayerView()
+                        .environmentObject(orientationInfo)
+                        .frame(maxWidth: .infinity, maxHeight: 140)
                 }
                 .ignoresSafeArea(edges: .bottom)
             }
@@ -97,11 +98,27 @@ struct ContentView: View {
 
             TransmitDivider()
 
-            ScrollView {
-                episodes
-                    .padding(.horizontal, 24)
-            }
+            ZStack {
+                ScrollView {
+                    episodes
+                        .padding(.horizontal, 24)
+                        .padding(.bottom, shouldShowMinimizeView ? 96 : 0)
+                }
 
+                if shouldShowMinimizeView {
+                    VStack {
+                        Spacer()
+                        VStack(spacing: 0) {
+                            TransmitDivider()
+                            MinimizePlayerView()
+                                .environmentObject(orientationInfo)
+                                .frame(maxWidth: .infinity, maxHeight: 100)
+                        }
+                    }
+                    .ignoresSafeArea()
+                }
+
+            }
         }
     }
     
@@ -192,7 +209,7 @@ struct ContentView: View {
             Text(episode.description)
                 .fontWithLineHeight(font: .systemFont(ofSize: 16))
                 .foregroundColor(Styles.paragraph)
-                .lineLimit(0)
+                .lineLimit(100)
             HStack(spacing: 16) {
                 Button(action: {
                     shouldShowMinimizeView = true
