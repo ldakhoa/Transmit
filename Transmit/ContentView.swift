@@ -29,7 +29,7 @@ struct ContentView: View {
                     Spacer()
                     MinimizePlayerView()
                 }
-                .ignoresSafeArea()
+                .ignoresSafeArea(edges: .bottom)
             }
         }
     }
@@ -180,12 +180,22 @@ struct TransmitDivider: View {
 
 struct MinimizePlayerView: View {
     @State private var isPlaying: Bool = false
+    @State private var sliderValue: Double = 6.0
 
     var body: some View {
         ZStack {
-            BlurView(style: .extraLight)
+            Color.white
+                .opacity(0.8)
                 .frame(maxWidth: .infinity, maxHeight: 150)
             VStack {
+                SliderView(
+                    value: $sliderValue,
+                    sliderRange: 0...10
+                )
+                .frame(height: 8)
+
+                Spacer()
+
                 Text("5: Bill Lumbergh")
                     .bold()
                     .font(.system(size: 15))
@@ -234,9 +244,10 @@ struct MinimizePlayerView: View {
                     }
                 }
                 .padding(.horizontal, 32)
+                Spacer()
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: 120)
+        .frame(maxWidth: .infinity, maxHeight: 140)
     }
 }
 
